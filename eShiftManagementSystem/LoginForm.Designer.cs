@@ -44,9 +44,9 @@ namespace eShiftManagementSystem
             this.lblUsername.AutoSize = true;
             this.lblUsername.Location = new System.Drawing.Point(292, 188);
             this.lblUsername.Name = "lblUsername";
-            this.lblUsername.Size = new System.Drawing.Size(88, 13);
+            this.lblUsername.Size = new System.Drawing.Size(35, 13);
             this.lblUsername.TabIndex = 0;
-            this.lblUsername.Text = "Username/Email:";
+            this.lblUsername.Text = "Email:";
             // 
             // txtUsername
             // 
