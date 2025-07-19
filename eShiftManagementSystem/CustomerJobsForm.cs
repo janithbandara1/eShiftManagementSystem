@@ -38,7 +38,7 @@ namespace eShiftManagementSystem
             string startLocation = txtStartLocation.Text.Trim();
             string destination = txtDestination.Text.Trim();
             DateTime requestedDate = dtpRequestedDate.Value;
-            string status = txtStatus.Text.Trim();
+            string status = cmbStatus.Text.Trim();
             if (string.IsNullOrEmpty(startLocation) || string.IsNullOrEmpty(destination) || string.IsNullOrEmpty(status))
             {
                 MessageBox.Show("All fields are required.");
@@ -67,15 +67,14 @@ namespace eShiftManagementSystem
             string startLocation = txtStartLocation.Text.Trim();
             string destination = txtDestination.Text.Trim();
             DateTime requestedDate = dtpRequestedDate.Value;
-            string status = txtStatus.Text.Trim();
+            string status = cmbStatus.Text.Trim();
             string connStr = ConfigurationManager.ConnectionStrings["eShiftDBConnection"].ConnectionString;
             using (SqlConnection conn = new SqlConnection(connStr))
             {
-                string query = "UPDATE Jobs SET StartLocation=@StartLocation, Destination=@Destination, Status=@Status, RequestedDate=@RequestedDate WHERE JobID=@JobID AND CustomerID=@CustomerID";
+                string query = "UPDATE Jobs SET StartLocation=@StartLocation, Destination=@Destination, RequestedDate=@RequestedDate WHERE JobID=@JobID AND CustomerID=@CustomerID AND Status='Pending'";
                 SqlCommand cmd = new SqlCommand(query, conn);
                 cmd.Parameters.AddWithValue("@StartLocation", startLocation);
                 cmd.Parameters.AddWithValue("@Destination", destination);
-                cmd.Parameters.AddWithValue("@Status", status);
                 cmd.Parameters.AddWithValue("@RequestedDate", requestedDate);
                 cmd.Parameters.AddWithValue("@JobID", jobId);
                 cmd.Parameters.AddWithValue("@CustomerID", customerId);
@@ -108,8 +107,12 @@ namespace eShiftManagementSystem
             var row = dgvJobs.SelectedRows[0];
             txtStartLocation.Text = row.Cells["StartLocation"].Value?.ToString();
             txtDestination.Text = row.Cells["Destination"].Value?.ToString();
-            txtStatus.Text = row.Cells["Status"].Value?.ToString();
+            cmbStatus.Text = row.Cells["Status"].Value?.ToString();
             dtpRequestedDate.Value = row.Cells["RequestedDate"].Value != null ? Convert.ToDateTime(row.Cells["RequestedDate"].Value) : DateTime.Now;
+            // Only allow update and delete if status is Pending
+            bool isPending = cmbStatus.Text == "Pending";
+            btnUpdate.Enabled = isPending;
+            btnDelete.Enabled = isPending;
         }
     }
 }

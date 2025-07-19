@@ -8,7 +8,7 @@ namespace eShiftManagementSystem
         private System.Windows.Forms.TextBox txtStartLocation;
         private System.Windows.Forms.TextBox txtDestination;
         private System.Windows.Forms.DateTimePicker dtpRequestedDate;
-        private System.Windows.Forms.TextBox txtStatus;
+        private System.Windows.Forms.ComboBox cmbStatus;
         private System.Windows.Forms.Button btnAdd;
         private System.Windows.Forms.Button btnUpdate;
         private System.Windows.Forms.Button btnDelete;
@@ -33,7 +33,7 @@ namespace eShiftManagementSystem
             this.txtStartLocation = new System.Windows.Forms.TextBox();
             this.txtDestination = new System.Windows.Forms.TextBox();
             this.dtpRequestedDate = new System.Windows.Forms.DateTimePicker();
-            this.txtStatus = new System.Windows.Forms.TextBox();
+            this.cmbStatus = new System.Windows.Forms.ComboBox();
             this.btnAdd = new System.Windows.Forms.Button();
             this.btnUpdate = new System.Windows.Forms.Button();
             this.btnDelete = new System.Windows.Forms.Button();
@@ -83,12 +83,19 @@ namespace eShiftManagementSystem
             this.dtpRequestedDate.Size = new System.Drawing.Size(180, 20);
             this.dtpRequestedDate.TabIndex = 7;
             // 
-            // txtStatus
+            // cmbStatus
             // 
-            this.txtStatus.Location = new System.Drawing.Point(430, 80);
-            this.txtStatus.Name = "txtStatus";
-            this.txtStatus.Size = new System.Drawing.Size(180, 20);
-            this.txtStatus.TabIndex = 9;
+            this.cmbStatus.Location = new System.Drawing.Point(430, 80);
+            this.cmbStatus.Name = "cmbStatus";
+            this.cmbStatus.Size = new System.Drawing.Size(180, 21);
+            this.cmbStatus.TabIndex = 9;
+            this.cmbStatus.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+            this.cmbStatus.Items.AddRange(new object[] {
+            "Pending",
+            "Accepted",
+            "Declined",
+            "Completed"});
+            this.cmbStatus.Enabled = false;
             // 
             // btnAdd
             // 
@@ -160,7 +167,7 @@ namespace eShiftManagementSystem
             this.Controls.Add(this.lblRequestedDate);
             this.Controls.Add(this.dtpRequestedDate);
             this.Controls.Add(this.lblStatus);
-            this.Controls.Add(this.txtStatus);
+            this.Controls.Add(this.cmbStatus);
             this.Controls.Add(this.btnAdd);
             this.Controls.Add(this.btnUpdate);
             this.Controls.Add(this.btnDelete);
