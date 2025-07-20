@@ -16,6 +16,7 @@ namespace eShiftManagementSystem
             btnUpdate.Click += BtnUpdate_Click;
             btnDelete.Click += BtnDelete_Click;
             dgvTransportUnits.SelectionChanged += DgvTransportUnits_SelectionChanged;
+            btnViewAvailableUnits.Click += BtnViewAvailableUnits_Click;
         }
 
         private void LoadTransportUnits()
@@ -104,6 +105,33 @@ namespace eShiftManagementSystem
             txtDriverName.Text = row.Cells["DriverName"].Value?.ToString();
             txtAssistantName.Text = row.Cells["AssistantName"].Value?.ToString();
             txtContainerDetails.Text = row.Cells["ContainerDetails"].Value?.ToString();
+        }
+
+        private void BtnViewAvailableUnits_Click(object sender, EventArgs e)
+        {
+            LoadAvailableUnits();
+        }
+
+        private void LoadAvailableUnits()
+        {
+            string connStr = ConfigurationManager.ConnectionStrings["eShiftDBConnection"].ConnectionString;
+            using (SqlConnection conn = new SqlConnection(connStr))
+            {
+                string query = @"
+                    SELECT tu.TransportUnitID, tu.LorryNumber, tu.DriverName, tu.AssistantName, tu.ContainerDetails
+                    FROM TransportUnits tu
+                    WHERE tu.TransportUnitID NOT IN (
+                        SELECT l.TransportUnitID
+                        FROM Loads l
+                        INNER JOIN Jobs j ON l.JobID = j.JobID
+                        WHERE j.Status <> 'Completed'
+                    )
+                ";
+                SqlDataAdapter da = new SqlDataAdapter(query, conn);
+                DataTable dt = new DataTable();
+                da.Fill(dt);
+                dgvTransportUnits.DataSource = dt;
+            }
         }
     }
 }

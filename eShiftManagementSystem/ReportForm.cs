@@ -12,6 +12,17 @@ namespace eShiftManagementSystem
         {
             InitializeComponent();
             btnGenerateReport.Click += BtnGenerateReport_Click;
+            cmbReportType.SelectedIndexChanged += CmbReportType_SelectedIndexChanged;
+            dtpFrom.Enabled = false;
+            dtpTo.Enabled = false;
+        }
+
+        private void CmbReportType_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            string reportType = cmbReportType.SelectedItem?.ToString();
+            bool isDateRange = reportType == "Jobs by Date Range";
+            dtpFrom.Enabled = isDateRange;
+            dtpTo.Enabled = isDateRange;
         }
 
         private void BtnGenerateReport_Click(object sender, EventArgs e)
@@ -40,6 +51,12 @@ namespace eShiftManagementSystem
                 case "Products List":
                     query = "SELECT * FROM Products";
                     break;
+                case "Jobs by Date Range":
+                    query = "SELECT * FROM Jobs WHERE RequestedDate >= @FromDate AND RequestedDate <= @ToDate";
+                    break;
+                case "Delivery Performance":
+                    query = "SELECT Status, COUNT(*) AS JobCount FROM Jobs GROUP BY Status";
+                    break;
                 default:
                     MessageBox.Show("Unknown report type.");
                     return;
@@ -47,11 +64,54 @@ namespace eShiftManagementSystem
             string connStr = ConfigurationManager.ConnectionStrings["eShiftDBConnection"].ConnectionString;
             using (SqlConnection conn = new SqlConnection(connStr))
             {
-                SqlDataAdapter da = new SqlDataAdapter(query, conn);
+                SqlDataAdapter da;
+                if (reportType == "Jobs by Date Range")
+                {
+                    da = new SqlDataAdapter(query, conn);
+                    da.SelectCommand.Parameters.AddWithValue("@FromDate", dtpFrom.Value.Date);
+                    da.SelectCommand.Parameters.AddWithValue("@ToDate", dtpTo.Value.Date);
+                }
+                else
+                {
+                    da = new SqlDataAdapter(query, conn);
+                }
                 DataTable dt = new DataTable();
                 da.Fill(dt);
                 dgvReportResults.DataSource = dt;
+                // For Delivery Performance, show completion rate
+                if (reportType == "Delivery Performance")
+                {
+                    int completed = 0, total = 0;
+                    foreach (DataRow row in dt.Rows)
+                    {
+                        total += Convert.ToInt32(row["JobCount"]);
+                        if (row["Status"].ToString() == "Completed")
+                            completed = Convert.ToInt32(row["JobCount"]);
+                    }
+                    double rate = total > 0 ? (double)completed / total * 100 : 0;
+                    MessageBox.Show($"Delivery Completion Rate: {rate:F2}%");
+                }
             }
+        }
+
+        private void lblFrom_Click(object sender, EventArgs e)
+        {
+
+        }
+
+        private void dtpFrom_ValueChanged(object sender, EventArgs e)
+        {
+
+        }
+
+        private void lblTo_Click(object sender, EventArgs e)
+        {
+
+        }
+
+        private void dtpTo_ValueChanged(object sender, EventArgs e)
+        {
+
         }
     }
 }

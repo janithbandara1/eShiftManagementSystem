@@ -18,6 +18,8 @@ namespace eShiftManagementSystem
         private System.Windows.Forms.Label lblPhone;
         private System.Windows.Forms.Label lblAddress;
         private System.Windows.Forms.Label lblPassword;
+        private System.Windows.Forms.TextBox txtSearch;
+        private System.Windows.Forms.Button btnSearch;
 
         protected override void Dispose(bool disposing)
         {
@@ -45,6 +47,8 @@ namespace eShiftManagementSystem
             this.lblPhone = new System.Windows.Forms.Label();
             this.lblAddress = new System.Windows.Forms.Label();
             this.lblPassword = new System.Windows.Forms.Label();
+            this.txtSearch = new System.Windows.Forms.TextBox();
+            this.btnSearch = new System.Windows.Forms.Button();
             ((System.ComponentModel.ISupportInitialize)(this.dgvCustomers)).BeginInit();
             this.SuspendLayout();
             // 
@@ -60,10 +64,10 @@ namespace eShiftManagementSystem
             // 
             // dgvCustomers
             // 
-            this.dgvCustomers.Location = new System.Drawing.Point(20, 200);
+            this.dgvCustomers.Location = new System.Drawing.Point(20, 206);
             this.dgvCustomers.Name = "dgvCustomers";
             this.dgvCustomers.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.FullRowSelect;
-            this.dgvCustomers.Size = new System.Drawing.Size(600, 200);
+            this.dgvCustomers.Size = new System.Drawing.Size(600, 194);
             this.dgvCustomers.TabIndex = 1;
             // 
             // txtName
@@ -103,7 +107,7 @@ namespace eShiftManagementSystem
             // 
             // btnAdd
             // 
-            this.btnAdd.Location = new System.Drawing.Point(20, 150);
+            this.btnAdd.Location = new System.Drawing.Point(20, 170);
             this.btnAdd.Name = "btnAdd";
             this.btnAdd.Size = new System.Drawing.Size(80, 30);
             this.btnAdd.TabIndex = 2;
@@ -111,7 +115,7 @@ namespace eShiftManagementSystem
             // 
             // btnUpdate
             // 
-            this.btnUpdate.Location = new System.Drawing.Point(110, 150);
+            this.btnUpdate.Location = new System.Drawing.Point(110, 170);
             this.btnUpdate.Name = "btnUpdate";
             this.btnUpdate.Size = new System.Drawing.Size(80, 30);
             this.btnUpdate.TabIndex = 3;
@@ -119,7 +123,7 @@ namespace eShiftManagementSystem
             // 
             // btnDelete
             // 
-            this.btnDelete.Location = new System.Drawing.Point(200, 150);
+            this.btnDelete.Location = new System.Drawing.Point(200, 170);
             this.btnDelete.Name = "btnDelete";
             this.btnDelete.Size = new System.Drawing.Size(80, 30);
             this.btnDelete.TabIndex = 4;
@@ -165,6 +169,21 @@ namespace eShiftManagementSystem
             this.lblPassword.TabIndex = 10;
             this.lblPassword.Text = "Password:";
             // 
+            // txtSearch
+            // 
+            this.txtSearch.Location = new System.Drawing.Point(20, 140);
+            this.txtSearch.Name = "txtSearch";
+            this.txtSearch.Size = new System.Drawing.Size(200, 20);
+            this.txtSearch.TabIndex = 12;
+            // 
+            // btnSearch
+            // 
+            this.btnSearch.Location = new System.Drawing.Point(230, 140);
+            this.btnSearch.Name = "btnSearch";
+            this.btnSearch.Size = new System.Drawing.Size(80, 23);
+            this.btnSearch.TabIndex = 13;
+            this.btnSearch.Text = "Search";
+            // 
             // CustomerManagementForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -182,6 +201,8 @@ namespace eShiftManagementSystem
             this.Controls.Add(this.txtAddress);
             this.Controls.Add(this.lblPassword);
             this.Controls.Add(this.txtPassword);
+            this.Controls.Add(this.txtSearch);
+            this.Controls.Add(this.btnSearch);
             this.Controls.Add(this.btnAdd);
             this.Controls.Add(this.btnUpdate);
             this.Controls.Add(this.btnDelete);

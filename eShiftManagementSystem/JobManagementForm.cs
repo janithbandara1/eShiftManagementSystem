@@ -11,19 +11,70 @@ namespace eShiftManagementSystem
         public JobManagementForm()
         {
             InitializeComponent();
+            LoadFilterOptions();
             LoadJobs();
             btnAdd.Click += BtnAdd_Click;
             btnUpdate.Click += BtnUpdate_Click;
             btnDelete.Click += BtnDelete_Click;
             dgvJobs.SelectionChanged += DgvJobs_SelectionChanged;
+            btnFilter.Click += BtnFilter_Click;
         }
 
-        private void LoadJobs()
+        private void LoadFilterOptions()
+        {
+            // Load customers for filter
+            string connStr = ConfigurationManager.ConnectionStrings["eShiftDBConnection"].ConnectionString;
+            using (SqlConnection conn = new SqlConnection(connStr))
+            {
+                SqlDataAdapter da = new SqlDataAdapter("SELECT CustomerID, Name FROM Customers", conn);
+                DataTable dt = new DataTable();
+                da.Fill(dt);
+                cmbFilterCustomer.Items.Clear();
+                cmbFilterCustomer.Items.Add("All");
+                foreach (DataRow row in dt.Rows)
+                {
+                    cmbFilterCustomer.Items.Add(new ComboBoxItem(row["Name"].ToString(), row["CustomerID"].ToString()));
+                }
+                cmbFilterCustomer.SelectedIndex = 0;
+            }
+            cmbFilterStatus.SelectedIndex = 0;
+            dtpFilterFrom.Value = DateTime.Today.AddMonths(-1);
+            dtpFilterTo.Value = DateTime.Today;
+        }
+
+        private void BtnFilter_Click(object sender, EventArgs e)
+        {
+            LoadJobs(
+                cmbFilterCustomer.SelectedItem is ComboBoxItem item ? item.Value : null,
+                dtpFilterFrom.Value,
+                dtpFilterTo.Value,
+                cmbFilterStatus.SelectedItem?.ToString()
+            );
+        }
+
+        private void LoadJobs(string customerId = null, DateTime? fromDate = null, DateTime? toDate = null, string status = null)
         {
             string connStr = ConfigurationManager.ConnectionStrings["eShiftDBConnection"].ConnectionString;
             using (SqlConnection conn = new SqlConnection(connStr))
             {
-                SqlDataAdapter da = new SqlDataAdapter("SELECT * FROM Jobs", conn);
+                string query = "SELECT * FROM Jobs WHERE 1=1";
+                if (!string.IsNullOrEmpty(customerId))
+                    query += " AND CustomerID=@CustomerID";
+                if (fromDate.HasValue)
+                    query += " AND RequestedDate >= @FromDate";
+                if (toDate.HasValue)
+                    query += " AND RequestedDate <= @ToDate";
+                if (!string.IsNullOrEmpty(status) && status != "All")
+                    query += " AND Status=@Status";
+                SqlDataAdapter da = new SqlDataAdapter(query, conn);
+                if (!string.IsNullOrEmpty(customerId))
+                    da.SelectCommand.Parameters.AddWithValue("@CustomerID", customerId);
+                if (fromDate.HasValue)
+                    da.SelectCommand.Parameters.AddWithValue("@FromDate", fromDate.Value);
+                if (toDate.HasValue)
+                    da.SelectCommand.Parameters.AddWithValue("@ToDate", toDate.Value);
+                if (!string.IsNullOrEmpty(status) && status != "All")
+                    da.SelectCommand.Parameters.AddWithValue("@Status", status);
                 DataTable dt = new DataTable();
                 da.Fill(dt);
                 dgvJobs.DataSource = dt;
@@ -109,6 +160,23 @@ namespace eShiftManagementSystem
             txtDestination.Text = row.Cells["Destination"].Value?.ToString();
             cmbStatus.SelectedItem = row.Cells["Status"].Value?.ToString();
             txtRequestedDate.Text = row.Cells["RequestedDate"].Value?.ToString();
+        }
+
+        private class ComboBoxItem
+        {
+            public string Text { get; set; }
+            public string Value { get; set; }
+            public ComboBoxItem(string text, string value)
+            {
+                Text = text;
+                Value = value;
+            }
+            public override string ToString() => Text;
+        }
+
+        private void btnFilter_Click_1(object sender, EventArgs e)
+        {
+
         }
     }
 }

@@ -16,6 +16,7 @@ namespace eShiftManagementSystem
         private System.Windows.Forms.Label lblDriverName;
         private System.Windows.Forms.Label lblAssistantName;
         private System.Windows.Forms.Label lblContainerDetails;
+        private System.Windows.Forms.Button btnViewAvailableUnits;
 
         protected override void Dispose(bool disposing)
         {
@@ -41,6 +42,7 @@ namespace eShiftManagementSystem
             this.lblDriverName = new System.Windows.Forms.Label();
             this.lblAssistantName = new System.Windows.Forms.Label();
             this.lblContainerDetails = new System.Windows.Forms.Label();
+            this.btnViewAvailableUnits = new System.Windows.Forms.Button();
             ((System.ComponentModel.ISupportInitialize)(this.dgvTransportUnits)).BeginInit();
             this.SuspendLayout();
             // 
@@ -114,6 +116,14 @@ namespace eShiftManagementSystem
             this.btnDelete.TabIndex = 4;
             this.btnDelete.Text = "Delete";
             // 
+            // btnViewAvailableUnits
+            // 
+            this.btnViewAvailableUnits.Location = new System.Drawing.Point(300, 120);
+            this.btnViewAvailableUnits.Name = "btnViewAvailableUnits";
+            this.btnViewAvailableUnits.Size = new System.Drawing.Size(150, 30);
+            this.btnViewAvailableUnits.TabIndex = 10;
+            this.btnViewAvailableUnits.Text = "View Available Units";
+            // 
             // lblLorryNumber
             // 
             this.lblLorryNumber.Location = new System.Drawing.Point(20, 50);
@@ -164,6 +174,7 @@ namespace eShiftManagementSystem
             this.Controls.Add(this.btnAdd);
             this.Controls.Add(this.btnUpdate);
             this.Controls.Add(this.btnDelete);
+            this.Controls.Add(this.btnViewAvailableUnits);
             this.Name = "TransportUnitManagementForm";
             this.Text = "Transport Unit Management";
             ((System.ComponentModel.ISupportInitialize)(this.dgvTransportUnits)).EndInit();
